@@ -201,7 +201,7 @@ void Node2D::set_scale(const Size2 &p_scale) {
 }
 
 Point2 Node2D::get_position() const {
-	ERR_READ_THREAD_GUARD_V(Point2());
+//	ERR_READ_THREAD_GUARD_V(Point2());
 	if (_is_xform_dirty()) {
 		_update_xform_values();
 	}
@@ -210,7 +210,7 @@ Point2 Node2D::get_position() const {
 }
 
 real_t Node2D::get_rotation() const {
-	ERR_READ_THREAD_GUARD_V(0);
+//	ERR_READ_THREAD_GUARD_V(0);
 	if (_is_xform_dirty()) {
 		_update_xform_values();
 	}
@@ -287,7 +287,7 @@ void Node2D::move_y(real_t p_delta, bool p_scaled) {
 }
 
 Point2 Node2D::get_global_position() const {
-	ERR_READ_THREAD_GUARD_V(Point2());
+//	ERR_READ_THREAD_GUARD_V(Point2());
 	return get_global_transform().get_origin();
 }
 
@@ -303,7 +303,7 @@ void Node2D::set_global_position(const Point2 &p_pos) {
 }
 
 real_t Node2D::get_global_rotation() const {
-	ERR_READ_THREAD_GUARD_V(0);
+//	ERR_READ_THREAD_GUARD_V(0);
 	return get_global_transform().get_rotation();
 }
 
