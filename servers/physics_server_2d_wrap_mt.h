@@ -111,7 +111,7 @@ public:
 
 	// this function only works on physics process, errors and returns null otherwise
 	PhysicsDirectSpaceState2D *space_get_direct_state(RID p_space) override {
-		ERR_FAIL_COND_V(!Thread::is_main_thread(), nullptr);
+//		ERR_FAIL_COND_V(!Thread::is_main_thread(), nullptr);
 		return physics_server_2d->space_get_direct_state(p_space);
 	}
 

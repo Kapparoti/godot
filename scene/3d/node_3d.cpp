@@ -311,7 +311,7 @@ void Node3D::set_quaternion(const Quaternion &p_quaternion) {
 }
 
 Vector3 Node3D::get_global_position() const {
-	ERR_READ_THREAD_GUARD_V(Vector3());
+//	ERR_READ_THREAD_GUARD_V(Vector3());
 	return get_global_transform().get_origin();
 }
 
@@ -335,7 +335,7 @@ void Node3D::set_global_basis(const Basis &p_basis) {
 }
 
 Vector3 Node3D::get_global_rotation() const {
-	ERR_READ_THREAD_GUARD_V(Vector3());
+//	ERR_READ_THREAD_GUARD_V(Vector3());
 	return get_global_transform().get_basis().get_euler();
 }
 
@@ -806,12 +806,12 @@ void Node3D::set_scale(const Vector3 &p_scale) {
 }
 
 Vector3 Node3D::get_position() const {
-	ERR_READ_THREAD_GUARD_V(Vector3());
+//	ERR_READ_THREAD_GUARD_V(Vector3());
 	return data.local_transform.origin;
 }
 
 Vector3 Node3D::get_rotation() const {
-	ERR_READ_THREAD_GUARD_V(Vector3());
+//	ERR_READ_THREAD_GUARD_V(Vector3());
 	if (_test_dirty_bits(DIRTY_EULER_ROTATION_AND_SCALE)) {
 		_update_rotation_and_scale();
 	}

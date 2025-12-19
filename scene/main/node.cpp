@@ -1783,7 +1783,7 @@ void Node::_update_children_cache_impl() const {
 }
 
 int Node::get_child_count(bool p_include_internal) const {
-	ERR_THREAD_GUARD_V(0);
+//	ERR_THREAD_GUARD_V(0);
 	if (p_include_internal) {
 		return data.children.size();
 	}
@@ -1793,7 +1793,7 @@ int Node::get_child_count(bool p_include_internal) const {
 }
 
 Node *Node::get_child(int p_index, bool p_include_internal) const {
-	ERR_THREAD_GUARD_V(nullptr);
+//	ERR_THREAD_GUARD_V(nullptr);
 	_update_children_cache();
 
 	if (p_include_internal) {
@@ -1813,7 +1813,7 @@ Node *Node::get_child(int p_index, bool p_include_internal) const {
 }
 
 TypedArray<Node> Node::get_children(bool p_include_internal) const {
-	ERR_THREAD_GUARD_V(TypedArray<Node>());
+//	ERR_THREAD_GUARD_V(TypedArray<Node>());
 	TypedArray<Node> arr;
 	int cc = get_child_count(p_include_internal);
 	arr.resize(cc);
@@ -1834,7 +1834,7 @@ Node *Node::_get_child_by_name(const StringName &p_name) const {
 }
 
 Node *Node::get_node_or_null(const NodePath &p_path) const {
-	ERR_THREAD_GUARD_V(nullptr);
+//	ERR_THREAD_GUARD_V(nullptr);
 	if (p_path.is_empty()) {
 		return nullptr;
 	}
@@ -2723,7 +2723,7 @@ void Node::get_storable_properties(HashSet<StringName> &r_storable_properties) c
 
 String Node::to_string() {
 	// Keep this method in sync with `Object::to_string`.
-	ERR_THREAD_GUARD_V(String());
+//	ERR_THREAD_GUARD_V(String());
 	if (get_script_instance()) {
 		bool valid;
 		String ret = get_script_instance()->to_string(&valid);
@@ -4125,12 +4125,12 @@ void Node::remove_meta(const StringName &p_name) {
 }
 
 Variant Node::get_meta(const StringName &p_name, const Variant &p_default) const {
-	ERR_THREAD_GUARD_V(Variant());
+//	ERR_THREAD_GUARD_V(Variant());
 	return Object::get_meta(p_name, p_default);
 }
 
 void Node::get_meta_list(List<StringName> *p_list) const {
-	ERR_THREAD_GUARD;
+//	ERR_THREAD_GUARD;
 	Object::get_meta_list(p_list);
 }
 
