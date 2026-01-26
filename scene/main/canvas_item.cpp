@@ -174,7 +174,7 @@ Transform2D CanvasItem::get_screen_transform() const {
 }
 
 Transform2D CanvasItem::get_global_transform() const {
-	ERR_READ_THREAD_GUARD_V(Transform2D());
+//	ERR_READ_THREAD_GUARD_V(Transform2D());
 
 	if (_is_global_invalid()) {
 		// This code can enter multiple times from threads if dirty, this is expected.
@@ -687,7 +687,7 @@ bool CanvasItem::is_z_relative() const {
 }
 
 int CanvasItem::get_z_index() const {
-	ERR_READ_THREAD_GUARD_V(0);
+//	ERR_READ_THREAD_GUARD_V(0);
 	return z_index;
 }
 
