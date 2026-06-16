@@ -600,6 +600,7 @@ public:
 	Rect2 get_anchorable_rect() const override;
 
 	void set_scale(const Vector2 &p_scale);
+	Vector2 _clamp_min_scale(const Vector2 &scale) const;
 	Vector2 get_scale() const;
 	void set_rotation(real_t p_radians);
 	void set_rotation_degrees(real_t p_degrees);

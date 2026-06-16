@@ -80,6 +80,7 @@ public:
 	void set_rotation_degrees(real_t p_degrees);
 	void set_skew(real_t p_radians);
 	void set_scale(const Size2 &p_scale);
+	Size2 _clamp_min_scale(const Size2 &p_scale) const;
 
 	void rotate(real_t p_radians);
 	void move_x(real_t p_delta, bool p_scaled = false);

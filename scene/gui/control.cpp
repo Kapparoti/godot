@@ -63,7 +63,7 @@ STATIC_ASSERT_INCOMPLETE_TYPE(class, RenderingServer);
 Dictionary Control::_edit_get_state() const {
 	Dictionary s;
 	s["rotation"] = get_rotation();
-	s["scale"] = get_scale();
+	s["scale"] = _clamp_min_scale(get_scale());
 	s["pivot"] = get_pivot_offset();
 	s["pivot_ratio"] = get_pivot_offset_ratio();
 
@@ -1613,17 +1613,24 @@ void Control::set_scale(const Vector2 &p_scale) {
 		return;
 	}
 
-	data.scale = p_scale;
-	// Avoid having 0 scale values, can lead to errors in physics and rendering.
-	if (data.scale.x == 0) {
-		data.scale.x = CMP_EPSILON;
-	}
-	if (data.scale.y == 0) {
-		data.scale.y = CMP_EPSILON;
-	}
+	data.scale = _clamp_min_scale(p_scale);
+	
 	queue_redraw();
 	_notify_transform();
 	queue_accessibility_update();
+}
+
+Vector2 Control::_clamp_min_scale(const Vector2 &scale) const {
+	Vector2 clamped_scale = scale;
+	// Avoid having 0 scale values, can lead to errors in physics and rendering.
+	if (clamped_scale.x == 0) {
+		clamped_scale.x = CMP_EPSILON;
+	}
+	if (clamped_scale.y == 0) {
+		clamped_scale.y = CMP_EPSILON;
+	}
+	
+	return clamped_scale;
 }
 
 Vector2 Control::get_scale() const {
@@ -2381,7 +2388,7 @@ void Control::set_offset_transform_scale(const Vector2 &p_scale) {
 	}
 
 	_ensure_allocated_offset_transform();
-	data.offset_transform->scale = p_scale;
+	data.offset_transform->scale = _clamp_min_scale(p_scale);
 
 	if (!data.offset_transform->enabled) {
 		return;

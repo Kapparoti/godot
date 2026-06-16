@@ -50,7 +50,7 @@ Dictionary Node2D::_edit_get_state() const {
 void Node2D::_edit_set_state(const Dictionary &p_state) {
 	position = p_state["position"];
 	rotation = p_state["rotation"];
-	scale = p_state["scale"];
+	scale = _clamp_min_scale(p_state["scale"]);
 	skew = p_state["skew"];
 
 	_update_transform();
@@ -132,13 +132,20 @@ void Node2D::_update_xform_values() const {
 	rotation = transform.get_rotation();
 	skew = transform.get_skew();
 	position = transform.columns[2];
-	scale = transform.get_scale();
+	scale = _clamp_min_scale(transform.get_scale());
+
 	_set_xform_dirty(false);
 }
 
 void Node2D::_update_transform() {
-	transform.set_rotation_scale_and_skew(rotation, scale, skew);
+	transform.set_rotation_scale_and_skew(rotation, _clamp_min_scale(scale), skew);
 	transform.columns[2] = position;
+
+	Size2 clamped_scale = _clamp_min_scale(transform.get_scale());
+	if (scale != clamped_scale) {
+		transform.set_scale(clamped_scale);
+		scale = clamped_scale;
+	}
 
 	RenderingServer::get_singleton()->canvas_item_set_transform(get_canvas_item(), transform);
 
@@ -193,15 +200,22 @@ void Node2D::set_scale(const Size2 &p_scale) {
 	if (_is_xform_dirty()) {
 		_update_xform_values();
 	}
-	scale = p_scale;
-	// Avoid having 0 scale values, can lead to errors in physics and rendering.
-	if (Math::is_zero_approx(scale.x)) {
-		scale.x = CMP_EPSILON;
-	}
-	if (Math::is_zero_approx(scale.y)) {
-		scale.y = CMP_EPSILON;
-	}
+	scale = _clamp_min_scale(p_scale);
+	
 	_update_transform();
+}
+
+Size2 Node2D::_clamp_min_scale(const Size2 &p_scale) const {
+	Size2 clamped_scale = p_scale;
+	// Avoid having 0 scale values, can lead to errors in physics and rendering.
+	if (Math::is_zero_approx(clamped_scale.x)) {
+		clamped_scale.x = CMP_EPSILON;
+	}
+	if (Math::is_zero_approx(clamped_scale.y)) {
+		clamped_scale.y = CMP_EPSILON;
+	}
+	
+	return clamped_scale;
 }
 
 Point2 Node2D::get_position() const {
