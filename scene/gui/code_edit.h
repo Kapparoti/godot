@@ -259,6 +259,7 @@ private:
 		Ref<Texture2D> folded_icon;
 		Ref<Texture2D> can_fold_code_region_icon;
 		Ref<Texture2D> folded_code_region_icon;
+		Ref<Texture2D> can_fold_code_region_end_icon;
 		Ref<Texture2D> folded_eol_icon;
 		Ref<Texture2D> completion_color_bg;
 
@@ -432,6 +433,7 @@ public:
 	bool is_line_folding_enabled() const;
 
 	bool can_fold_line(int p_line) const;
+	bool can_fold_up_line(int p_line) const;
 
 	void fold_line(int p_line);
 	void unfold_line(int p_line);

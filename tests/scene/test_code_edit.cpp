@@ -3652,7 +3652,11 @@ TEST_CASE("[SceneTree][CodeEdit] region folding") {
 		code_edit->add_comment_delimiter("#", "");
 		code_edit->set_text("#region region_name\nline2\nline3\n#endregion\nvisible line");
 		CHECK(code_edit->can_fold_line(0));
+		CHECK(code_edit->can_fold_line(3));
 		for (int i = 1; i < 5; i++) {
+			if (i == 3) {
+				continue;
+			}
 			CHECK_FALSE(code_edit->can_fold_line(i));
 		}
 		for (int i = 0; i < 5; i++) {
@@ -3711,8 +3715,9 @@ TEST_CASE("[SceneTree][CodeEdit] region folding") {
 		CHECK(code_edit->is_line_code_region_start(0));
 		CHECK(code_edit->is_line_code_region_end(6));
 		CHECK(code_edit->can_fold_line(0));
+		CHECK(code_edit->can_fold_line(6));
 		for (int i = 1; i < 7; i++) {
-			if (i == 2) {
+			if (i == 2 || i == 6) {
 				continue;
 			}
 			CHECK_FALSE(code_edit->can_fold_line(i));

@@ -1792,6 +1792,12 @@ void CodeEdit::_fold_gutter_draw_callback(int p_line, int p_gutter, Rect2 p_regi
 
 	bool can_fold = can_fold_line(p_line);
 
+	if (can_fold && is_line_code_region_end(p_line)) {
+		Color region_icon_color = theme_cache.folded_code_region_color;
+		region_icon_color.a = MAX(region_icon_color.a, 0.4f);
+		theme_cache.can_fold_code_region_end_icon->draw_rect(ci, p_region, false, region_icon_color);
+		return;
+	}
 	if (is_line_code_region_start(p_line)) {
 		Color region_icon_color = theme_cache.folded_code_region_color;
 		region_icon_color.a = MAX(region_icon_color.a, 0.4f);
@@ -1835,6 +1841,19 @@ bool CodeEdit::can_fold_line(int p_line) const {
 
 	// Check for code region.
 	if (is_line_code_region_end(p_line)) {
+		int region_level = 0;
+		// Check if there is a valid region tag.
+		for (int next_line = p_line - 1; next_line >= 0; next_line--) {
+			if (is_line_code_region_start(next_line)) {
+				region_level += 1;
+				if (region_level == 1) {
+					return true;
+				}
+			}
+			if (is_line_code_region_end(next_line)) {
+				region_level -= 1;
+			}
+		}
 		return false;
 	}
 	if (is_line_code_region_start(p_line)) {
@@ -3237,6 +3256,7 @@ void CodeEdit::_bind_methods() {
 	BIND_THEME_ITEM_CUSTOM(Theme::DATA_TYPE_ICON, CodeEdit, folded_icon, "folded");
 	BIND_THEME_ITEM_CUSTOM(Theme::DATA_TYPE_ICON, CodeEdit, can_fold_code_region_icon, "can_fold_code_region");
 	BIND_THEME_ITEM_CUSTOM(Theme::DATA_TYPE_ICON, CodeEdit, folded_code_region_icon, "folded_code_region");
+	BIND_THEME_ITEM_CUSTOM(Theme::DATA_TYPE_ICON, CodeEdit, can_fold_code_region_end_icon, "can_fold_code_region_end");
 	BIND_THEME_ITEM(Theme::DATA_TYPE_ICON, CodeEdit, folded_eol_icon);
 	BIND_THEME_ITEM(Theme::DATA_TYPE_ICON, CodeEdit, completion_color_bg);
 
@@ -3359,6 +3379,22 @@ void CodeEdit::_gutter_clicked(int p_line, int p_gutter) {
 	}
 
 	if (p_gutter == fold_gutter) {
+		if (is_line_code_region_end(p_line)) {
+			int region_level = 0;
+			for (int next_line = p_line - 1; next_line >= 0; next_line--) {
+				if (is_line_code_region_start(next_line)) {
+					region_level += 1;
+					if (region_level == 1) {
+						p_line = next_line;
+						break;
+					}
+				}
+				if (is_line_code_region_end(next_line)) {
+					region_level -= 1;
+				}
+			}
+		}
+
 		if (is_line_folded(p_line)) {
 			unfold_line(p_line);
 		} else if (can_fold_line(p_line)) {
